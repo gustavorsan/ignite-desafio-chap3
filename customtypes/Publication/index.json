@@ -1,0 +1,71 @@
+{
+  "id": "Publication",
+  "label": "Publication",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "config": {
+          "label": "slug",
+          "placeholder": ""
+        },
+        "type": "UID"
+      },
+      "title": {
+        "config": {
+          "label": "title",
+          "placeholder": ""
+        },
+        "type": "Text"
+      },
+      "subtitle": {
+        "config": {
+          "label": "subtitle",
+          "placeholder": ""
+        },
+        "type": "Text"
+      },
+      "author": {
+        "config": {
+          "label": "author",
+          "placeholder": ""
+        },
+        "type": "Text"
+      },
+      "banner": {
+        "config": {
+          "label": "banner",
+          "constraint": {},
+          "thumbnails": []
+        },
+        "type": "Image"
+      },
+      "content": {
+        "config": {
+          "label": "content",
+          "placeholder": "",
+          "fields": {
+            "heading": {
+              "config": {
+                "label": "heading",
+                "placeholder": ""
+              },
+              "type": "Text"
+            },
+            "body": {
+              "config": {
+                "label": "body",
+                "placeholder": "",
+                "allowTargetBlank": true,
+                "single": "paragraph,em,image,hyperlink,embed,list-item,o-list-item,rtl,strong"
+              },
+              "type": "StructuredText"
+            }
+          }
+        },
+        "type": "Group"
+      }
+    }
+  }
+}
