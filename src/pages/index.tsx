@@ -1,9 +1,11 @@
+import Head from 'next/head';
+import Link from 'next/link';
+import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
 import { GetStaticProps } from 'next';
-
 import { getPrismicClient } from '../services/prismic';
-
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import Header from '../components/Header';
 
 interface Post {
   uid?: string;
@@ -25,7 +27,49 @@ interface HomeProps {
 }
 
 export default function Home(): JSX.Element {
-  return <h1>hello</h1>;
+  return (
+    <>
+      <main className={commonStyles.container}>
+        <Header />
+        <div className={styles.posts}>
+          <Link href="/">
+            <a className={styles.post}>
+              <strong>O Titulo</strong>
+              <p>Texto do post aleatorio para teste de texto</p>
+              <ul>
+                <li>
+                  <AiOutlineCalendar />
+                  <time>10-05-2020</time>
+                </li>
+                <li>
+                  <AiOutlineUser />
+                  <span>José</span>
+                </li>
+              </ul>
+            </a>
+          </Link>
+
+          <Link href="/">
+            <a className={styles.post}>
+              <strong>O Titulo</strong>
+              <p>Texto do post aleatorio para teste de texto</p>
+              <ul>
+                <li>
+                  <AiOutlineCalendar />
+                  <time>10-05-2020</time>
+                </li>
+                <li>
+                  <AiOutlineUser />
+                  <span>José</span>
+                </li>
+              </ul>
+            </a>
+          </Link>
+          <button type="button">Carregar mais posts</button>
+        </div>
+      </main>
+    </>
+  );
 }
 
 // export const getStaticProps = async () => {
