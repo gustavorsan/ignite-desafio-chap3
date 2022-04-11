@@ -72,9 +72,23 @@ export default function Home(): JSX.Element {
   );
 }
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+export const getStaticProps = async () => {
+  const prismic = getPrismicClient();
+  /* const postsResponse = await prismic.get(
+    {
+      predicates: prismic.predicate.at('document.type', 'Publication'),
+    },
+    {
+      fetch: ['Publication.title', 'Publication.content'],
+    }
+  ); */
 
-//   // TODO
-// };
+  const postsResponse = await prismic.getAllByType('Publication', {
+    pageSize: 100,
+  });
+
+  console.log(postsResponse);
+  return {
+    props: {},
+  };
+};
