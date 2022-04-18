@@ -42,12 +42,10 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
       return response.json();
     });
 
-    console.log('posts', postsResponse);
-
     setNextPage(postsResponse.next_page);
     setCurrentPage(postsResponse.page);
 
-    const newPosts = postsResponse?.results.map((post: any) => {
+    const newPosts = postsResponse?.results.map((post: Post) => {
       return {
         uid: post.uid,
         slug: post.uid,
@@ -101,14 +99,14 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
   );
 }
 
-export const getStaticProps = async (): Promise<any> => {
+export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
   const postsResponse = await prismic.getByType('Publication', {
     pageSize: 1,
   });
 
-  const posts = postsResponse?.results.map((post: any) => {
+  const posts = postsResponse?.results.map((post: Post) => {
     return {
       uid: post.uid,
       slug: post.uid,
