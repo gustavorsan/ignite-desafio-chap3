@@ -1,5 +1,10 @@
 /* eslint-disable react/no-danger */
+
+import { format } from 'date-fns';
+
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
 import {
   AiOutlineCalendar,
@@ -35,9 +40,40 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps): JSX.Element {
-  console.log(post);
+  const totalWords = post.data.content.reduce((total, contentItem) => {
+    // eslint-disable-next-line no-param-reassign
+    total += contentItem?.heading.split(/[,.\s]/).length;
+
+    const words = contentItem?.body.map(
+      item => item.text.split(/[,.\s]/).length
+    );
+
+    words.forEach(item => {
+      // eslint-disable-next-line no-param-reassign
+      total += item;
+    });
+
+    return total;
+  }, 0);
+
+  const readtime = Math.ceil(totalWords / 200);
+
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <h1>Carregando...</h1>;
+  }
+
+  const formatedDate = format(
+    new Date(post.first_publication_date),
+    'dd MMM yyyy'
+  );
+
   return (
     <>
+      <Head>
+        <title>{`${post?.data.title} | spacetaveling`}</title>
+      </Head>
       <Header />
       <img src={post?.data.banner.url} alt="imagem" className={styles.banner} />
       <main className={commonStyles.container}>
@@ -47,7 +83,7 @@ export default function Post({ post }: PostProps): JSX.Element {
             <ul>
               <li>
                 <AiOutlineCalendar />
-                <time>12 mar 2022</time>
+                {formatedDate}
               </li>
               <li>
                 <AiOutlineUser />
@@ -55,7 +91,7 @@ export default function Post({ post }: PostProps): JSX.Element {
               </li>
               <li>
                 <AiOutlineClockCircle />
-                <span>Jao</span>
+                <span>{`${readtime} min`}</span>
               </li>
             </ul>
           </div>
@@ -80,11 +116,21 @@ export default function Post({ post }: PostProps): JSX.Element {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  //   const prismic = getPrismicClient();
-  //   const posts = await prismic.query(TODO);
+  const prismic = getPrismicClient();
+  const posts = await prismic.getAllByType('Publication', {
+    pageSize: 100,
+  });
+
+  const paths = posts.map(post => {
+    return {
+      params: {
+        slug: post.uid,
+      },
+    };
+  });
 
   return {
-    paths: [],
+    paths,
     fallback: true,
   };
 };
@@ -93,18 +139,19 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
   const { slug } = context.params;
   const response = await prismic.getByUID('Publication', String(slug), {});
-
-  console.log('a*************', response);
-
+  /* const response = await prismic.query([
+    Prismic.Predicates.at('document.type', 'posts'),
+  ]); */
   const post = {
     uid: response.uid,
-    first_publication_date: response.firs_publication_date,
+    first_publication_date: response.first_publication_date,
+
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,
       author: response.data.author,
       banner: {
-        urle: response.data.banner.url,
+        url: response.data.banner.url,
       },
       content: response.data.content.map(content => {
         return {
