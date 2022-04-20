@@ -1,0 +1,41 @@
+{
+  "id": "4d4ed949-ced4-412b-b9cd-438f247b33d8",
+  "uid": "sunt-id-facere",
+  "type": "posts",
+  "data": {
+    "title": "matrix bricks-and-clicks experiences",
+    "subtitle": "exploit virtual convergence",
+    "author": "monetize customized users",
+    "banner": {
+      "dimensions": {
+        "width": 900,
+        "height": 500
+      },
+      "alt": "Placeholder image",
+      "copyright": null,
+      "url": "https://images.unsplash.com/photo-1591012911207-0dbac31f37da?w=900&h=500&fit=crop"
+    },
+    "content": [
+      {
+        "heading": "maximize scalable e-markets",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Eu dolor voluptate cupidatat.",
+            "spans": []
+          }
+        ]
+      },
+      {
+        "heading": "facilitate back-end architectures",
+        "body": [
+          {
+            "type": "paragraph",
+            "text": "Fugiat voluptate dolore enim aliquip sunt non nostrud pariatur do sit consequat et ex ad in. Enim consequat elit ut pariatur eu irure nulla fugiat ad laboris veniam. Adipisicing id sint pariatur est et esse anim mollit nisi et minim.",
+            "spans": []
+          }
+        ]
+      }
+    ]
+  }
+}

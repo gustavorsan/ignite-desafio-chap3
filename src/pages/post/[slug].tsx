@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
@@ -66,7 +67,8 @@ export default function Post({ post }: PostProps): JSX.Element {
 
   const formatedDate = format(
     new Date(post.first_publication_date),
-    'dd MMM yyyy'
+    'dd MMM yyyy',
+    { locale: ptBR }
   );
 
   return (
@@ -117,7 +119,7 @@ export default function Post({ post }: PostProps): JSX.Element {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
-  const posts = await prismic.getAllByType('Publication', {
+  const posts = await prismic.getAllByType('posts', {
     pageSize: 100,
   });
 
@@ -138,7 +140,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
   const { slug } = context.params;
-  const response = await prismic.getByUID('Publication', String(slug), {});
+  const response = await prismic.getByUID('posts', String(slug), {});
   /* const response = await prismic.query([
     Prismic.Predicates.at('document.type', 'posts'),
   ]); */

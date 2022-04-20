@@ -4,7 +4,8 @@ import { AiOutlineCalendar, AiOutlineUser } from 'react-icons/ai';
 import { GetStaticProps } from 'next';
 import { format } from 'date-fns';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ptBR } from 'date-fns/locale';
 import { getPrismicClient } from '../services/prismic';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -30,7 +31,26 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): JSX.Element {
-  const [posts, setPosts] = useState<Post[]>(postsPagination.results);
+  const formmattedPosts = postsPagination.results.map((post: Post) => {
+    return {
+      uid: post.uid,
+      slug: post.uid,
+      first_publication_date: format(
+        new Date(post.first_publication_date),
+        'dd MMM yyyy',
+        {
+          locale: ptBR,
+        }
+      ),
+      data: {
+        author: post.data.author,
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+      },
+    };
+  });
+
+  const [posts, setPosts] = useState<Post[]>(formmattedPosts);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -77,7 +97,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
                 <ul>
                   <li>
                     <AiOutlineCalendar />
-                    <time>{post.first_publication_date}</time>
+                    {post.first_publication_date}
                   </li>
                   <li>
                     <AiOutlineUser />
@@ -102,7 +122,7 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
-  const postsResponse = await prismic.getByType('Publication', {
+  const postsResponse = await prismic.getByType('posts', {
     pageSize: 1,
   });
 
@@ -110,10 +130,8 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       uid: post.uid,
       slug: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'dd MMM yyyy'
-      ),
+      first_publication_date: post.first_publication_date,
+
       data: {
         author: post.data.author,
         title: post.data.title,
